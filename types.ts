@@ -5,6 +5,7 @@ export interface Profile {
   avatar_url: string; // The main display image
   elo_rating: number;
   active: boolean;
+  genero: 'masculino' | 'femenino';
   wins?: number;
   losses?: number;
   matches?: number;

@@ -2,24 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { Navbar } from '../components/Navbar';
 import { fetchRandomPair, recordVote } from '../services/supabaseClient';
 import { Profile } from '../types';
-import { RefreshCcw, Flag, Check } from 'lucide-react';
+import { RefreshCcw, Flag, Check, Sparkles } from 'lucide-react';
 
 export const VotingView = () => {
+  const [selectedGender, setSelectedGender] = useState<'masculino' | 'femenino'>('femenino');
   const [pair, setPair] = useState<[Profile, Profile] | null>(null);
   const [loading, setLoading] = useState(true);
   const [voted, setVoted] = useState<'left' | 'right' | null>(null);
 
+  const isFemale = selectedGender === 'femenino';
+  
+  // Dynamic theme colors
+  const themeColor = isFemale ? 'text-pink-500' : 'text-celestial';
+  const themeBorder = isFemale ? 'border-pink-500' : 'border-celestial';
+  const themeBg = isFemale ? 'bg-pink-500' : 'bg-celestial';
+  const themeGlow = isFemale ? 'shadow-[0_0_30px_rgba(236,72,153,0.4)]' : 'shadow-[0_0_30px_rgba(14,165,233,0.4)]';
+  const themeAmbient = isFemale ? 'bg-pink-500/10' : 'bg-celestial/10';
+
   const loadNewPair = async () => {
     setLoading(true);
     setVoted(null);
-    const newPair = await fetchRandomPair();
+    const newPair = await fetchRandomPair(selectedGender);
     setPair(newPair);
     setLoading(false);
   };
 
   useEffect(() => {
     loadNewPair();
-  }, []);
+  }, [selectedGender]);
 
   const handleVote = async (choice: 'left' | 'right') => {
     if (!pair || voted) return;
@@ -37,70 +47,97 @@ export const VotingView = () => {
     }, 1500);
   };
 
-  if (loading && !pair) {
-    return (
-      <div className="min-h-screen bg-deep-space flex flex-col">
-        <Navbar />
-        <div className="flex-grow flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-celestial"></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!pair) return null;
-
   return (
-    <div className="min-h-screen bg-deep-space flex flex-col font-display overflow-hidden relative">
+    <div className="min-h-screen bg-deep-space flex flex-col font-display overflow-hidden relative transition-colors duration-700">
+      {/* Dynamic Ambient Background */}
       <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-celestial/10 rounded-full blur-[120px] opacity-20"></div>
-          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px] opacity-20"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(rgba(14,165,233,0.1)_1px,transparent_1px)] bg-[length:40px_40px] opacity-20"></div>
+          <div className={`absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20 transition-colors duration-700 ${themeAmbient}`}></div>
+          <div className={`absolute bottom-0 right-1/4 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20 transition-colors duration-700 ${isFemale ? 'bg-purple-900/10' : 'bg-blue-900/10'}`}></div>
+          <div className={`absolute inset-0 bg-[radial-gradient(${isFemale ? 'rgba(236,72,153,0.1)' : 'rgba(14,165,233,0.1)'}_1px,transparent_1px)] bg-[length:40px_40px] opacity-20 transition-all duration-700`}></div>
       </div>
       
       <Navbar />
 
       <main className="relative z-10 flex-grow flex flex-col items-center justify-center px-4 py-8 w-full max-w-7xl mx-auto">
-        <div className="mb-12 text-center space-y-4">
-          <span className="px-4 py-1.5 rounded-full bg-celestial/10 border border-celestial/30 text-[10px] font-bold text-celestial uppercase tracking-[0.3em]">
+        
+        {/* Gender Toggle */}
+        <div className="mb-8 p-1 bg-white/5 rounded-full backdrop-blur-md border border-white/10 flex relative">
+          <button
+            onClick={() => setSelectedGender('femenino')}
+            className={`relative z-10 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${isFemale ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+          >
+            Chicas
+          </button>
+          <button
+             onClick={() => setSelectedGender('masculino')}
+             className={`relative z-10 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${!isFemale ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+          >
+            Chicos
+          </button>
+          
+          {/* Sliding Background */}
+          <div 
+            className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full transition-all duration-300 shadow-lg ${themeBg}`}
+            style={{ left: isFemale ? '4px' : 'calc(50%)' }}
+          ></div>
+        </div>
+
+        <div className="mb-8 text-center space-y-4">
+          <span className={`px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-[0.3em] ${themeColor}`}>
             INSTUADE Arena
           </span>
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter drop-shadow-lg">
-            ¿Quién es más lindo?
+            ¿Quién es más {isFemale ? 'linda' : 'lindo'}?
           </h2>
           <p className="text-gray-400 max-w-md mx-auto text-sm md:text-base font-light">
-            Elige el perfil superior. Tu elección redefine la jerarquía de INSTUADE.
+            Elige {isFemale ? 'a la chica' : 'al chico'} con más estilo. Tu elección redefine la jerarquía.
           </p>
         </div>
 
         {/* Battle Arena */}
-        <div className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 w-full">
-          
-          {/* VS Badge */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none hidden md:flex items-center justify-center w-20 h-20 rounded-full bg-black border-2 border-white/20 text-white font-light text-xl shadow-[0_0_40px_rgba(255,255,255,0.1)] backdrop-blur-xl">
-            VS
+        {loading && !pair ? (
+           <div className="h-[400px] flex items-center justify-center">
+              <div className={`animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 ${themeBorder}`}></div>
+           </div>
+        ) : !pair ? (
+          <div className="text-center text-white/50">No hay perfiles disponibles.</div>
+        ) : (
+          <div className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 w-full">
+            
+            {/* VS Badge */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none hidden md:flex items-center justify-center w-20 h-20 rounded-full bg-black border-2 border-white/20 text-white font-light text-xl shadow-[0_0_40px_rgba(255,255,255,0.1)] backdrop-blur-xl">
+              VS
+            </div>
+
+            {/* Left Card */}
+            <VoteCard 
+              profile={pair[0]} 
+              onClick={() => handleVote('left')} 
+              state={voted === 'left' ? 'winner' : voted === 'right' ? 'loser' : 'idle'}
+              themeColor={themeColor}
+              themeBorder={themeBorder}
+              themeGlow={themeGlow}
+              themeBg={themeBg}
+            />
+
+            {/* Mobile VS Badge */}
+            <div className="md:hidden flex items-center justify-center w-14 h-14 rounded-full bg-black border border-white/20 text-white font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] my-[-20px] z-20 relative backdrop-blur-xl">
+              VS
+            </div>
+
+            {/* Right Card */}
+            <VoteCard 
+              profile={pair[1]} 
+              onClick={() => handleVote('right')} 
+              state={voted === 'right' ? 'winner' : voted === 'left' ? 'loser' : 'idle'}
+              themeColor={themeColor}
+              themeBorder={themeBorder}
+              themeGlow={themeGlow}
+              themeBg={themeBg}
+            />
+
           </div>
-
-          {/* Left Card */}
-          <VoteCard 
-            profile={pair[0]} 
-            onClick={() => handleVote('left')} 
-            state={voted === 'left' ? 'winner' : voted === 'right' ? 'loser' : 'idle'}
-          />
-
-          {/* Mobile VS Badge */}
-          <div className="md:hidden flex items-center justify-center w-14 h-14 rounded-full bg-black border border-white/20 text-white font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] my-[-20px] z-20 relative backdrop-blur-xl">
-            VS
-          </div>
-
-          {/* Right Card */}
-          <VoteCard 
-            profile={pair[1]} 
-            onClick={() => handleVote('right')} 
-            state={voted === 'right' ? 'winner' : voted === 'left' ? 'loser' : 'idle'}
-          />
-
-        </div>
+        )}
 
         {/* Actions */}
         <div className="mt-16 flex flex-col md:flex-row items-center gap-6">
@@ -125,9 +162,13 @@ interface VoteCardProps {
   profile: Profile;
   onClick: () => void;
   state: 'idle' | 'winner' | 'loser';
+  themeColor: string;
+  themeBorder: string;
+  themeGlow: string;
+  themeBg: string;
 }
 
-const VoteCard: React.FC<VoteCardProps> = ({ profile, onClick, state }) => {
+const VoteCard: React.FC<VoteCardProps> = ({ profile, onClick, state, themeColor, themeBorder, themeGlow, themeBg }) => {
   return (
     <div 
       onClick={onClick}
@@ -135,12 +176,12 @@ const VoteCard: React.FC<VoteCardProps> = ({ profile, onClick, state }) => {
     >
       {/* Score Popup Animation */}
       {state === 'winner' && (
-        <div className="absolute -top-16 left-1/2 -translate-x-1/2 text-celestial font-bold text-4xl animate-bounce z-50 drop-shadow-[0_0_15px_rgba(14,165,233,0.6)]">
+        <div className={`absolute -top-16 left-1/2 -translate-x-1/2 font-bold text-4xl animate-bounce z-50 drop-shadow-lg ${themeColor}`}>
            +32
         </div>
       )}
 
-      <div className={`relative w-full h-full rounded-2xl overflow-hidden border transition-all duration-300 bg-black ${state === 'winner' ? 'border-celestial shadow-[0_0_30px_rgba(14,165,233,0.4)]' : 'border-white/10 group-hover:border-white/40'}`}>
+      <div className={`relative w-full h-full rounded-2xl overflow-hidden border transition-all duration-300 bg-black ${state === 'winner' ? `${themeBorder} ${themeGlow}` : 'border-white/10 group-hover:border-white/40'}`}>
         <img 
           src={profile.avatar_url} 
           alt={profile.username}
@@ -154,11 +195,11 @@ const VoteCard: React.FC<VoteCardProps> = ({ profile, onClick, state }) => {
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 transition-all duration-500">
           <div className="flex items-end justify-between">
             <div>
-              <h3 className={`text-2xl md:text-3xl font-bold mb-2 transition-colors ${state === 'winner' ? 'text-celestial' : 'text-white'}`}>
+              <h3 className={`text-2xl md:text-3xl font-bold mb-2 transition-colors ${state === 'winner' ? themeColor : 'text-white'}`}>
                 {profile.full_name}
               </h3>
               <div className="flex items-center gap-3">
-                <span className={`w-2 h-2 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] ${state === 'winner' ? 'bg-celestial' : 'bg-white'}`}></span>
+                <span className={`w-2 h-2 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] ${state === 'winner' ? themeBg : 'bg-white'}`}></span>
                 <p className="text-[10px] text-gray-400 font-bold tracking-[0.2em] uppercase">
                   {profile.career || 'Estudiante'} • ID #{profile.id.substring(0,4)}
                 </p>
@@ -167,7 +208,7 @@ const VoteCard: React.FC<VoteCardProps> = ({ profile, onClick, state }) => {
             
             {/* Checkmark for winner */}
             {state === 'winner' && (
-               <span className="flex items-center justify-center w-12 h-12 rounded-full bg-celestial text-white shadow-lg animate-pulse">
+               <span className={`flex items-center justify-center w-12 h-12 rounded-full text-white shadow-lg animate-pulse ${themeBg}`}>
                  <Check size={24} strokeWidth={3} />
                </span>
             )}

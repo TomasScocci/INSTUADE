@@ -43,11 +43,7 @@ export const LandingView = () => {
           </div>
           <span className="text-xl font-bold tracking-tight">INSTUADE</span>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-slate-400">
-          <button className="hover:text-white transition-colors">Institucional</button>
-          <button className="hover:text-white transition-colors">Preguntas Frecuentes</button>
-          <button className="hover:text-white transition-colors">Soporte</button>
-        </div>
+        {/* Navigation buttons removed as requested */}
       </nav>
 
       {/* Main Container */}
@@ -61,14 +57,14 @@ export const LandingView = () => {
                 <span className="text-[#257bf4] drop-shadow-[0_0_15px_rgba(37,123,244,0.4)]">mail de UADE</span>
               </h1>
               <p className="text-slate-400 text-sm leading-relaxed px-4">
-                Acceso exclusivo para la comunidad universitaria de la Fundación UADE.
+                Acceso exclusivo para alumnos de UADE
               </p>
             </div>
 
             <form onSubmit={validateAndProceed} className="space-y-6">
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-1">
-                  Email Institucional
+                  Email UADE
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -94,14 +90,14 @@ export const LandingView = () => {
                 type="submit"
                 className="w-full bg-[#257bf4] hover:bg-[#1d4ed8] text-white font-bold py-4 rounded-xl transition-all shadow-[0_4px_20px_rgba(37,123,244,0.3)] hover:shadow-[0_4px_25px_rgba(37,123,244,0.5)] active:scale-[0.98] flex items-center justify-center gap-2 group"
               >
-                Comenzar a votar
+                Ingresar
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
 
             <div className="mt-8 flex items-center justify-center gap-2 text-xs text-slate-500 font-medium">
               <Shield size={12} className="text-[#257bf4]" />
-              <span>Conexión segura vía SSO Estudiantil</span>
+              <span>Conexión segura</span>
             </div>
           </div>
         ) : (

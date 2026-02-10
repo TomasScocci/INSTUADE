@@ -4,6 +4,7 @@ import { LandingView } from './views/LandingView';
 import { VotingView } from './views/VotingView';
 import { RankingView } from './views/RankingView';
 import { ProfileView } from './views/ProfileView';
+import { LoginView } from './views/LoginView';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/vote" element={<VotingView />} />
         <Route path="/ranking" element={<RankingView />} />
         <Route path="/profile" element={<ProfileView />} />
+        <Route path="/login" element={<LoginView />} />
       </Routes>
     </Router>
   );

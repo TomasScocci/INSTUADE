@@ -7,6 +7,7 @@ export const Navbar = () => {
   const location = useLocation();
 
   const isRanking = location.pathname === '/ranking';
+  // Check if we are in profile or login to adjust UI potentially
   const isProfile = location.pathname === '/profile';
 
   return (
@@ -49,15 +50,18 @@ export const Navbar = () => {
              </button>
           ) : (
              <div className="flex items-center gap-4">
+                {/* User Icon -> Goes to Login now */}
                 <button 
-                  onClick={() => navigate('/profile')}
+                  onClick={() => navigate('/login')}
                   className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all border border-white/10"
+                  title="Iniciar Sesión"
                 >
                   <User size={20} className="text-celestial" />
                 </button>
                 <button 
                   onClick={() => navigate('/')}
                   className="w-10 h-10 rounded-full bg-white/5 hover:bg-red-500/20 flex items-center justify-center transition-all border border-white/10 group"
+                  title="Salir"
                 >
                   <LogOut size={20} className="text-white/50 group-hover:text-red-400" />
                 </button>
