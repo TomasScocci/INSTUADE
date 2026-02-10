@@ -57,8 +57,7 @@ export const ProfileView = () => {
               <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
               
               <div className="relative z-10 flex flex-col items-center text-center">
-                <span className="px-4 py-1 bg-white/20 rounded-full text-xs font-bold tracking-widest uppercase mb-4">Estatus Celestial</span>
-                <h3 className="text-slate-200 text-sm font-medium mb-2 uppercase tracking-tighter">Tu Rating ELO Actual</h3>
+                <h3 className="text-slate-200 text-sm font-medium mb-2 uppercase tracking-tighter">Tus Puntos</h3>
                 <div className="flex items-baseline gap-2">
                    <span className="text-7xl md:text-8xl font-black tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">1450</span>
                    <span className="text-2xl font-bold opacity-80 uppercase tracking-widest">pts</span>
@@ -76,14 +75,9 @@ export const ProfileView = () => {
                        +12
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-white/90">Estás en el top 5% de tu carrera</p>
+                  <p className="text-sm font-medium text-white/90">Posición #42 en el Ranking</p>
                 </div>
               </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <StatBox label="Votos Recibidos" value="2,840" />
-              <StatBox label="Win Rate" value="64.2%" />
             </div>
 
           </section>
@@ -105,12 +99,5 @@ const InfoRow = ({ label, value, icon, isLink }: any) => (
     <button className="flex items-center gap-2 text-[#257bf4] hover:bg-[#257bf4]/10 px-4 py-2 rounded-full transition-all text-sm font-bold">
       {icon} Editar
     </button>
-  </div>
-);
-
-const StatBox = ({ label, value }: any) => (
-  <div className="bg-white dark:bg-[#257bf4]/5 p-6 rounded-xl border border-slate-200 dark:border-[#257bf4]/10">
-    <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase mb-1">{label}</p>
-    <p className="text-2xl font-bold">{value}</p>
   </div>
 );

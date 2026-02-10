@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navbar } from '../components/Navbar';
 import { fetchRandomPair, recordVote } from '../services/supabaseClient';
 import { Profile } from '../types';
-import { RefreshCcw, Flag, Check, Sparkles } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 export const VotingView = () => {
   const [selectedGender, setSelectedGender] = useState<'masculino' | 'femenino'>('femenino');
@@ -58,7 +58,7 @@ export const VotingView = () => {
       
       <Navbar />
 
-      <main className="relative z-10 flex-grow flex flex-col items-center justify-center px-4 py-8 w-full max-w-7xl mx-auto">
+      <main className="relative z-10 flex-grow flex flex-col items-center justify-center px-2 md:px-4 py-8 w-full max-w-7xl mx-auto">
         
         {/* Gender Toggle */}
         <div className="mb-8 p-1 bg-white/5 rounded-full backdrop-blur-md border border-white/10 flex relative">
@@ -82,16 +82,13 @@ export const VotingView = () => {
           ></div>
         </div>
 
-        <div className="mb-8 text-center space-y-4">
+        <div className="mb-6 md:mb-8 text-center space-y-4">
           <span className={`px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-[0.3em] ${themeColor}`}>
             INSTUADE Arena
           </span>
-          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter drop-shadow-lg">
+          <h2 className="text-3xl md:text-6xl font-bold text-white tracking-tighter drop-shadow-lg">
             ¿Quién es más {isFemale ? 'linda' : 'lindo'}?
           </h2>
-          <p className="text-gray-400 max-w-md mx-auto text-sm md:text-base font-light">
-            Elige {isFemale ? 'a la chica' : 'al chico'} con más estilo. Tu elección redefine la jerarquía.
-          </p>
         </div>
 
         {/* Battle Arena */}
@@ -102,57 +99,42 @@ export const VotingView = () => {
         ) : !pair ? (
           <div className="text-center text-white/50">No hay perfiles disponibles.</div>
         ) : (
-          <div className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 w-full">
+          <div className="relative flex flex-row items-stretch justify-center gap-3 md:gap-16 w-full max-w-5xl">
             
             {/* VS Badge */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none hidden md:flex items-center justify-center w-20 h-20 rounded-full bg-black border-2 border-white/20 text-white font-light text-xl shadow-[0_0_40px_rgba(255,255,255,0.1)] backdrop-blur-xl">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none flex items-center justify-center w-10 h-10 md:w-20 md:h-20 rounded-full bg-black border-2 border-white/20 text-white font-light text-xs md:text-xl shadow-[0_0_40px_rgba(255,255,255,0.1)] backdrop-blur-xl">
               VS
             </div>
 
             {/* Left Card */}
-            <VoteCard 
-              profile={pair[0]} 
-              onClick={() => handleVote('left')} 
-              state={voted === 'left' ? 'winner' : voted === 'right' ? 'loser' : 'idle'}
-              themeColor={themeColor}
-              themeBorder={themeBorder}
-              themeGlow={themeGlow}
-              themeBg={themeBg}
-            />
-
-            {/* Mobile VS Badge */}
-            <div className="md:hidden flex items-center justify-center w-14 h-14 rounded-full bg-black border border-white/20 text-white font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] my-[-20px] z-20 relative backdrop-blur-xl">
-              VS
+            <div className="flex-1 min-w-0 max-w-sm">
+                <VoteCard 
+                profile={pair[0]} 
+                onClick={() => handleVote('left')} 
+                state={voted === 'left' ? 'winner' : voted === 'right' ? 'loser' : 'idle'}
+                themeColor={themeColor}
+                themeBorder={themeBorder}
+                themeGlow={themeGlow}
+                themeBg={themeBg}
+                />
             </div>
 
             {/* Right Card */}
-            <VoteCard 
-              profile={pair[1]} 
-              onClick={() => handleVote('right')} 
-              state={voted === 'right' ? 'winner' : voted === 'left' ? 'loser' : 'idle'}
-              themeColor={themeColor}
-              themeBorder={themeBorder}
-              themeGlow={themeGlow}
-              themeBg={themeBg}
-            />
+            <div className="flex-1 min-w-0 max-w-sm">
+                <VoteCard 
+                profile={pair[1]} 
+                onClick={() => handleVote('right')} 
+                state={voted === 'right' ? 'winner' : voted === 'left' ? 'loser' : 'idle'}
+                themeColor={themeColor}
+                themeBorder={themeBorder}
+                themeGlow={themeGlow}
+                themeBg={themeBg}
+                />
+            </div>
 
           </div>
         )}
 
-        {/* Actions */}
-        <div className="mt-16 flex flex-col md:flex-row items-center gap-6">
-          <button 
-            onClick={loadNewPair}
-            className="px-8 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 backdrop-blur-md"
-          >
-            <RefreshCcw size={16} />
-            OMITIR
-          </button>
-          <button className="px-8 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 backdrop-blur-md">
-            <Flag size={16} />
-            REPORTAR
-          </button>
-        </div>
       </main>
     </div>
   );
@@ -172,16 +154,9 @@ const VoteCard: React.FC<VoteCardProps> = ({ profile, onClick, state, themeColor
   return (
     <div 
       onClick={onClick}
-      className={`group relative w-full max-w-sm aspect-[3/4] cursor-pointer transition-all duration-500 transform ${state === 'loser' ? 'opacity-40 scale-95 grayscale' : 'hover:-translate-y-2'}`}
+      className={`group relative w-full aspect-[3/4] cursor-pointer transition-all duration-500 transform ${state === 'loser' ? 'opacity-40 scale-95 grayscale' : 'hover:-translate-y-2'}`}
     >
-      {/* Score Popup Animation */}
-      {state === 'winner' && (
-        <div className={`absolute -top-16 left-1/2 -translate-x-1/2 font-bold text-4xl animate-bounce z-50 drop-shadow-lg ${themeColor}`}>
-           +32
-        </div>
-      )}
-
-      <div className={`relative w-full h-full rounded-2xl overflow-hidden border transition-all duration-300 bg-black ${state === 'winner' ? `${themeBorder} ${themeGlow}` : 'border-white/10 group-hover:border-white/40'}`}>
+      <div className={`relative w-full h-full rounded-xl md:rounded-2xl overflow-hidden border transition-all duration-300 bg-black ${state === 'winner' ? `${themeBorder} ${themeGlow}` : 'border-white/10 group-hover:border-white/40'}`}>
         <img 
           src={profile.avatar_url} 
           alt={profile.username}
@@ -189,32 +164,26 @@ const VoteCard: React.FC<VoteCardProps> = ({ profile, onClick, state, themeColor
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500"></div>
 
         {/* Content */}
-        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 transition-all duration-500">
-          <div className="flex items-end justify-between">
-            <div>
-              <h3 className={`text-2xl md:text-3xl font-bold mb-2 transition-colors ${state === 'winner' ? themeColor : 'text-white'}`}>
+        <div className="absolute bottom-0 left-0 w-full p-3 md:p-8 transition-all duration-500">
+          <div className="flex items-end justify-between gap-2">
+            <div className="min-w-0">
+              <h3 className={`text-sm md:text-3xl font-bold mb-1 md:mb-2 truncate transition-colors ${state === 'winner' ? themeColor : 'text-white'}`}>
                 {profile.full_name}
               </h3>
-              <div className="flex items-center gap-3">
-                <span className={`w-2 h-2 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] ${state === 'winner' ? themeBg : 'bg-white'}`}></span>
-                <p className="text-[10px] text-gray-400 font-bold tracking-[0.2em] uppercase">
-                  {profile.career || 'Estudiante'} • ID #{profile.id.substring(0,4)}
-                </p>
-              </div>
             </div>
             
             {/* Checkmark for winner */}
             {state === 'winner' && (
-               <span className={`flex items-center justify-center w-12 h-12 rounded-full text-white shadow-lg animate-pulse ${themeBg}`}>
-                 <Check size={24} strokeWidth={3} />
+               <span className={`flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 rounded-full text-white shadow-lg animate-pulse ${themeBg}`}>
+                 <Check className="w-4 h-4 md:w-6 md:h-6" strokeWidth={3} />
                </span>
             )}
-             {/* Hover indicator for idle */}
+             {/* Hover indicator for idle - hidden on mobile to save space/cleanliness */}
              {state === 'idle' && (
-               <span className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-xl">
+               <span className="flex-shrink-0 hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-xl">
                  <Check size={24} />
                </span>
             )}

@@ -58,7 +58,7 @@ export const RankingView = () => {
             <span className="text-white">RANKING</span> <span className={`${themeColor} transition-colors duration-500`}>{isFemale ? 'CHICAS' : 'CHICOS'}</span>
           </h1>
           <p className="text-white/40 uppercase tracking-[0.4em] text-xs font-bold">
-            Rendimiento de Élite • Clasificación en Vivo
+            Clasificación en Vivo
           </p>
         </div>
 
@@ -67,7 +67,7 @@ export const RankingView = () => {
           <div className="grid grid-cols-12 gap-4 px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
             <div className="col-span-2 md:col-span-1 text-center">Puesto</div>
             <div className="col-span-7 md:col-span-8 pl-4">Perfil</div>
-            <div className="col-span-3 text-right pr-4">Puntuación ELO</div>
+            <div className="col-span-3 text-right pr-4">Puntos</div>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -139,7 +139,6 @@ const RankingRow: React.FC<RankingRowProps> = ({ profile, index, themeColor, the
             <div className="flex flex-col">
               <span className={`text-xl font-bold text-white group-hover:${themeColor} transition-colors`}>{profile.full_name}</span>
               <div className="flex items-center gap-2">
-                <span className={`px-2 py-0.5 bg-white/5 ${themeColor} text-[10px] font-bold rounded uppercase tracking-tighter`}>Legendario</span>
                 <span className="text-white/30 text-xs font-medium">@{profile.username}</span>
               </div>
             </div>
